@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>MEE 26 Attendance Portal | Admin</title>
+<style>
+  :root {
+    --navy: #1F3A5F; --gold: #C9A227; --bg: #F4F6F9;
+    --text: #1B2433; --muted: #5B6677; --line: #D9DEE7; --danger: #B3261E;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+  header { background: var(--navy); color: #fff; padding: 22px 16px; text-align: center; border-bottom: 4px solid var(--gold); }
+  header h1 { margin: 0; font-size: 1.25rem; }
+  header p { margin: 6px 0 0; font-size: .9rem; opacity: .85; }
+  main { max-width: 420px; margin: 24px auto; padding: 0 16px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  h2 { margin: 0 0 16px; font-size: 1.1rem; color: var(--navy); }
+  label { display: block; margin: 14px 0 6px; font-weight: 600; font-size: .95rem; }
+  input[type=text], input[type=password] { width: 100%; padding: 13px; font-size: 1rem; border: 1px solid var(--line); border-radius: 8px; }
+  input:focus { outline: 3px solid rgba(201,162,39,.45); border-color: var(--gold); }
+  .show { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .9rem; color: var(--muted); }
+  button { width: 100%; margin-top: 18px; padding: 14px; font-size: 1rem; font-weight: 600; color: #fff; background: var(--navy); border: 0; border-radius: 8px; cursor: pointer; }
+  button:disabled { opacity: .6; cursor: wait; }
+  button.secondary { background: #fff; color: var(--navy); border: 1px solid var(--navy); }
+  .msg { min-height: 1.2em; margin-top: 14px; font-size: .95rem; color: var(--muted); }
+  .msg.error { color: var(--danger); }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #EEF2F8; color: var(--navy); font-size: .85rem; font-weight: 600; }
+  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 18px 16px 30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>MEE 26 Class Attendance Portal</h1>
+  <p>Takoradi Technical University</p>
+</header>
+
+<main>
+  <section class="card" id="loginView">
+    <h2>Administrator login</h2>
+    <form id="loginForm" autocomplete="on">
+      <label for="adminId">Admin ID</label>
+      <input type="text" id="adminId" autocomplete="username" autocapitalize="characters" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password" required>
+      <div class="show"><input type="checkbox" id="showPw"><label for="showPw" style="margin:0;font-weight:400">Show password</label></div>
+      <button type="submit" id="loginBtn">Log in</button>
+    </form>
+    <div class="msg" id="msg" role="status"></div>
+  </section>
+
+  <section class="card" id="welcomeView" hidden>
+    <h2>Welcome, <span id="who"></span></h2>
+    <p><span class="badge" id="role"></span></p>
+    <p>You are logged in. The admin tools will appear here as we build them.</p>
+    <button type="button" class="secondary" id="logoutBtn">Log out</button>
+  </section>
+</main>
+
+<footer>MEE 26 · Takoradi Technical University</footer>
+
+<script>
+  var API_URL = 'https://script.google.com/macros/s/AKfycbypjwlvhi3HKVw62uhCEB6DwYm7EaSc4MDd0Jd533W2teThqRe8NtA7ncFFTckCZgRs/exec';
+  var TOKEN_KEY = 'mee26_admin_token';
+  var $ = function (id) { return document.getElementById(id); };
+
+  function api(payload) {
+    return fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) })
+      .then(function (r) { return r.json(); });
+  }
+  function saveToken(t) { try { sessionStorage.setItem(TOKEN_KEY, t); } catch (e) {} }
+  function loadToken() { try { return sessionStorage.getItem(TOKEN_KEY); } catch (e) { return null; } }
+  function clearToken() { try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+
+  function show(view) {
+    $('loginView').hidden = view !== 'login';
+    $('welcomeView').hidden = view !== 'welcome';
+  }
+  function setMsg(text, isError) {
+    var m = $('msg');
+    m.textContent = text || '';
+    m.className = isError ? 'msg error' : 'msg';
+  }
+  function showWelcome(info) {
+    $('who').textContent = info.name;
+    $('role').textContent = info.role === 'secretary' ? 'Secretary' : 'Class representative';
+    show('welcome');
+  }
+
+  $('showPw').addEventListener('change', function () {
+    $('password').type = this.checked ? 'text' : 'password';
+  });
+
+  $('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('loginBtn');
+    btn.disabled = true; btn.textContent = 'Checking…'; setMsg('');
+    api({ action: 'login', adminId: $('adminId').value, password: $('password').value })
+      .then(function (res) {
+        if (res.ok) { saveToken(res.token); $('password').value = ''; showWelcome(res); }
+        else { setMsg(res.error || 'Could not log in.', true); }
+      })
+      .catch(function () { setMsg('Can’t reach the server. Check your internet and try again.', true); })
+      .then(function () { btn.disabled = false; btn.textContent = 'Log in'; });
+  });
+
+  $('logoutBtn').addEventListener('click', function () {
+    var token = loadToken();
+    clearToken();
+    show('login'); setMsg('You have been logged out.');
+    if (token) api({ action: 'logout', token: token }).catch(function () {});
+  });
+
+  (function start() {
+    var token = loadToken();
+    if (!token) { show('login'); return; }
+    api({ action: 'whoami', token: token })
+      .then(function (res) {
+        if (res.ok) { showWelcome(res); }
+        else { clearToken(); show('login'); setMsg(res.error || '', true); }
+      })
+      .catch(function () { show('login'); });
+  })();
+</script>
+</body>
+</html>
