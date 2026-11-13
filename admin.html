@@ -13,23 +13,52 @@
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+  button { font: inherit; cursor: pointer; }
+
   header { background: var(--navy); color: #fff; padding: 22px 16px; text-align: center; border-bottom: 4px solid var(--gold); }
   header h1 { margin: 0; font-size: 1.25rem; }
   header p { margin: 6px 0 0; font-size: .9rem; opacity: .85; }
   header .subtitle { margin: 6px 0 0; font-size: 1rem; font-weight: 600; color: #E3C766; }
-  main { max-width: 420px; margin: 24px auto; padding: 0 16px; }
+
+  .narrow { max-width: 420px; margin: 24px auto; padding: 0 16px; }
+  .wide { max-width: 960px; margin: 0 auto; padding: 20px 16px 8px; }
   .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
   h2 { margin: 0 0 16px; font-size: 1.1rem; color: var(--navy); }
   label { display: block; margin: 14px 0 6px; font-weight: 600; font-size: .95rem; }
   input[type=text], input[type=password] { width: 100%; padding: 13px; font-size: 1rem; border: 1px solid var(--line); border-radius: 8px; }
   input:focus { outline: 3px solid rgba(201,162,39,.45); border-color: var(--gold); }
   .show { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .9rem; color: var(--muted); }
-  button { width: 100%; margin-top: 18px; padding: 14px; font-size: 1rem; font-weight: 600; color: #fff; background: var(--navy); border: 0; border-radius: 8px; cursor: pointer; }
-  button:disabled { opacity: .6; cursor: wait; }
-  button.secondary { background: #fff; color: var(--navy); border: 1px solid var(--navy); }
+
+  .btn { width: 100%; margin-top: 18px; padding: 14px; font-size: 1rem; font-weight: 600; color: #fff; background: var(--navy); border: 0; border-radius: 8px; }
+  .btn:disabled { opacity: .6; cursor: wait; }
+  .btn.small { width: auto; margin: 0; padding: 9px 16px; font-size: .9rem; }
+  .btn.secondary { background: #fff; color: var(--navy); border: 1px solid var(--navy); }
+
   .msg { min-height: 1.2em; margin-top: 14px; font-size: .95rem; color: var(--muted); }
   .msg.error { color: var(--danger); }
+  .muted { color: var(--muted); }
   .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #EEF2F8; color: var(--navy); font-size: .85rem; font-weight: 600; }
+
+  .topbar { background: #fff; border-bottom: 1px solid var(--line); padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .topbar .who { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .tabs { background: #fff; border-bottom: 1px solid var(--line); display: flex; gap: 4px; padding: 0 12px; overflow-x: auto; }
+  .tab { background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+  .tab.active { color: var(--navy); border-bottom-color: var(--gold); }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 16px; }
+  .tile { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .tile .num { font-size: 1.8rem; font-weight: 700; color: var(--navy); }
+  .tile .lbl { color: var(--muted); font-size: .9rem; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; margin-top: 12px; }
+  .course { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .course-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
+  .chip { background: #EEF2F8; color: var(--navy); border-radius: 6px; padding: 2px 8px; font-size: .8rem; font-weight: 700; }
+  .line { color: var(--muted); font-size: .92rem; margin: 4px 0; }
+  .status { display: inline-block; margin-top: 8px; font-size: .8rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+  .status.on { background: #E4F4E8; color: #1E6B34; }
+  .status.off { background: #F6E5E3; color: var(--danger); }
+
   footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 18px 16px 30px; }
 </style>
 </head>
@@ -40,8 +69,8 @@
   <p>Takoradi Technical University</p>
 </header>
 
-<main>
-  <section class="card" id="loginView">
+<main class="narrow" id="loginWrap">
+  <section class="card">
     <h2>Administrator login</h2>
     <form id="loginForm" autocomplete="on">
       <label for="adminId">Admin ID</label>
@@ -49,18 +78,40 @@
       <label for="password">Password</label>
       <input type="password" id="password" autocomplete="current-password" required>
       <div class="show"><input type="checkbox" id="showPw"><label for="showPw" style="margin:0;font-weight:400">Show password</label></div>
-      <button type="submit" id="loginBtn">Log in</button>
+      <button type="submit" class="btn" id="loginBtn">Log in</button>
     </form>
     <div class="msg" id="msg" role="status"></div>
   </section>
-
-  <section class="card" id="welcomeView" hidden>
-    <h2>Welcome, <span id="who"></span></h2>
-    <p><span class="badge" id="role"></span></p>
-    <p>You are logged in. The admin tools will appear here as we build them.</p>
-    <button type="button" class="secondary" id="logoutBtn">Log out</button>
-  </section>
 </main>
+
+<div id="appWrap" hidden>
+  <div class="topbar">
+    <div class="who"><strong id="who"></strong><span class="badge" id="role"></span></div>
+    <button type="button" class="btn small secondary" id="logoutBtn">Log out</button>
+  </div>
+  <nav class="tabs">
+    <button type="button" class="tab active" data-view="home">Home</button>
+    <button type="button" class="tab" data-view="courses">Courses</button>
+  </nav>
+
+  <main class="wide">
+    <section id="homeView">
+      <div class="card">
+        <h2>Welcome, <span id="welcomeName"></span></h2>
+        <p class="muted" style="margin:0">You are logged in. More tools will appear in the menu above as we build them.</p>
+      </div>
+      <div class="tiles">
+        <div class="tile"><div class="num" id="courseCount">–</div><div class="lbl">Courses</div></div>
+      </div>
+    </section>
+
+    <section id="coursesView" hidden>
+      <h2>Courses</h2>
+      <p class="muted" style="margin:0 0 4px">Course codes and lecturer names can be added in the Courses tab of your Google Sheet. Refresh this page to see changes.</p>
+      <div class="course-grid" id="courseList"></div>
+    </section>
+  </main>
+</div>
 
 <footer>MEE 26 · Takoradi Technical University</footer>
 
@@ -68,6 +119,14 @@
   var API_URL = 'https://script.google.com/macros/s/AKfycbypjwlvhi3HKVw62uhCEB6DwYm7EaSc4MDd0Jd533W2teThqRe8NtA7ncFFTckCZgRs/exec';
   var TOKEN_KEY = 'mee26_admin_token';
   var $ = function (id) { return document.getElementById(id); };
+  var tabs = document.querySelectorAll('.tab');
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
 
   function api(payload) {
     return fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) })
@@ -77,19 +136,74 @@
   function loadToken() { try { return sessionStorage.getItem(TOKEN_KEY); } catch (e) { return null; } }
   function clearToken() { try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {} }
 
-  function show(view) {
-    $('loginView').hidden = view !== 'login';
-    $('welcomeView').hidden = view !== 'welcome';
+  function showScreen(name) {
+    $('loginWrap').hidden = name !== 'login';
+    $('appWrap').hidden = name !== 'app';
   }
   function setMsg(text, isError) {
     var m = $('msg');
     m.textContent = text || '';
     m.className = isError ? 'msg error' : 'msg';
   }
-  function showWelcome(info) {
+  function switchTab(name) {
+    $('homeView').hidden = name !== 'home';
+    $('coursesView').hidden = name !== 'courses';
+    Array.prototype.forEach.call(tabs, function (t) {
+      t.classList.toggle('active', t.getAttribute('data-view') === name);
+    });
+  }
+  Array.prototype.forEach.call(tabs, function (t) {
+    t.addEventListener('click', function () { switchTab(t.getAttribute('data-view')); });
+  });
+
+  function endSession(message) {
+    clearToken();
+    showScreen('login');
+    setMsg(message || '', !!message);
+  }
+
+  function renderCourses(list) {
+    var box = $('courseList');
+    box.innerHTML = '';
+    $('courseCount').textContent = list.length;
+    if (!list.length) {
+      box.appendChild(el('p', 'muted', 'No courses yet. Add them in the Courses tab of your Google Sheet.'));
+      return;
+    }
+    list.forEach(function (c) {
+      var card = el('div', 'course');
+      var top = el('div', 'course-top');
+      top.appendChild(el('strong', '', c.courseName));
+      top.appendChild(el('span', 'chip', c.courseId));
+      card.appendChild(top);
+      card.appendChild(el('div', 'line', 'Course code: ' + (c.courseCode || 'Not set yet')));
+      card.appendChild(el('div', 'line', 'Lecturer: ' + (c.lecturerName || 'Not set yet')));
+      card.appendChild(el('div', 'line', 'Hall radius ' + c.radiusM + ' m · Session ' + c.durationMin + ' min'));
+      card.appendChild(el('span', c.active ? 'status on' : 'status off', c.active ? 'Active' : 'Inactive'));
+      box.appendChild(card);
+    });
+  }
+
+  function loadCourses() {
+    $('courseList').textContent = 'Loading courses…';
+    api({ action: 'listCourses', token: loadToken() })
+      .then(function (res) {
+        if (res.ok) { renderCourses(res.courses); }
+        else if (res.expired) { endSession(res.error); }
+        else { $('courseList').textContent = res.error || 'Could not load courses.'; }
+      })
+      .catch(function () {
+        $('courseList').textContent = 'Can’t reach the server. Check your internet and try again.';
+      });
+  }
+
+  function enterApp(info) {
     $('who').textContent = info.name;
+    $('welcomeName').textContent = info.name;
     $('role').textContent = info.role === 'secretary' ? 'Secretary' : 'Class representative';
-    show('welcome');
+    showScreen('app');
+    switchTab('home');
+    loadCourses();
   }
 
   $('showPw').addEventListener('change', function () {
@@ -102,7 +216,7 @@
     btn.disabled = true; btn.textContent = 'Checking…'; setMsg('');
     api({ action: 'login', adminId: $('adminId').value, password: $('password').value })
       .then(function (res) {
-        if (res.ok) { saveToken(res.token); $('password').value = ''; showWelcome(res); }
+        if (res.ok) { saveToken(res.token); $('password').value = ''; enterApp(res); }
         else { setMsg(res.error || 'Could not log in.', true); }
       })
       .catch(function () { setMsg('Can’t reach the server. Check your internet and try again.', true); })
@@ -112,19 +226,20 @@
   $('logoutBtn').addEventListener('click', function () {
     var token = loadToken();
     clearToken();
-    show('login'); setMsg('You have been logged out.');
+    showScreen('login');
+    setMsg('You have been logged out.');
     if (token) api({ action: 'logout', token: token }).catch(function () {});
   });
 
   (function start() {
     var token = loadToken();
-    if (!token) { show('login'); return; }
+    if (!token) { showScreen('login'); return; }
     api({ action: 'whoami', token: token })
       .then(function (res) {
-        if (res.ok) { showWelcome(res); }
-        else { clearToken(); show('login'); setMsg(res.error || '', true); }
+        if (res.ok) { enterApp(res); }
+        else { endSession(res.error); }
       })
-      .catch(function () { show('login'); });
+      .catch(function () { showScreen('login'); });
   })();
 </script>
 </body>
