@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Check in | Diploma in Mechanical Engineering 2026</title>
+<style>
+  :root { --navy: #1F3A5F; --gold: #C9A227; --bg: #F4F6F9; --text: #1B2433; --muted: #5B6677; --line: #D9DEE7; --danger: #B3261E; --ok: #1E6B34; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+  header { background: var(--navy); color: #fff; padding: 20px 16px; text-align: center; border-bottom: 4px solid var(--gold); }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 5px 0 0; font-size: .9rem; opacity: .85; }
+  header .sub { color: #E3C766; font-weight: 600; opacity: 1; }
+  main { max-width: 420px; margin: 20px auto; padding: 0 16px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  h2 { margin: 0 0 6px; font-size: 1.2rem; color: var(--navy); }
+  label { display: block; margin: 16px 0 6px; font-weight: 600; font-size: .95rem; }
+  input { width: 100%; padding: 14px; font-size: 1.1rem; border: 1px solid var(--line); border-radius: 8px; }
+  input:focus { outline: 3px solid rgba(201,162,39,.45); border-color: var(--gold); }
+  button { font: inherit; cursor: pointer; }
+  .btn { width: 100%; margin-top: 20px; padding: 15px; font-size: 1.05rem; font-weight: 600; color: #fff; background: var(--navy); border: 0; border-radius: 8px; }
+  .btn:disabled { opacity: .6; cursor: wait; }
+  .seg { display: flex; gap: 6px; margin-top: 14px; }
+  .seg button { flex: 1; padding: 9px 6px; font-size: .85rem; border: 1px solid var(--line); background: #fff; color: var(--muted); border-radius: 8px; }
+  .seg button.on { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .idrow { display: flex; align-items: stretch; }
+  .prefix { display: flex; align-items: center; padding: 0 10px; background: #EEF2F8; border: 1px solid var(--line); border-right: 0; border-radius: 8px 0 0 8px; font-weight: 700; color: var(--navy); white-space: nowrap; }
+  .idrow input { border-radius: 0 8px 8px 0; }
+  .msg { min-height: 1.2em; margin-top: 14px; font-size: .95rem; color: var(--muted); }
+  .msg.error { color: var(--danger); }
+  .muted { color: var(--muted); margin: 0; }
+  .note { margin: 18px 0 0; font-size: .8rem; color: var(--muted); line-height: 1.4; }
+  .tick { width: 64px; height: 64px; border-radius: 50%; background: #E4F4E8; color: var(--ok); font-size: 2rem; display: flex; align-items: center; justify-content: center; margin: 4px auto 14px; }
+  .center { text-align: center; }
+  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 14px 16px 30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Diploma in Mechanical Engineering 2026</h1>
+  <p class="sub">Attendance check-in</p>
+  <p>Takoradi Technical University</p>
+</header>
+
+<main>
+  <section class="card" id="loading"><p class="muted">Loading…</p></section>
+
+  <section class="card" id="problem" hidden>
+    <h2 id="pTitle"></h2>
+    <p class="muted" id="pText"></p>
+  </section>
+
+  <section class="card" id="formView" hidden>
+    <h2 id="course"></h2>
+    <p class="muted" id="timer"></p>
+    <div class="seg">
+      <button type="button" id="modeIndex" class="on">I have an index number</button>
+      <button type="button" id="modeTemp">I don’t have one yet</button>
+    </div>
+    <form id="f" autocomplete="off">
+      <div id="indexBox">
+        <label for="code">Index number</label>
+        <div class="idrow"><span class="prefix">PD/MEE/26/</span><input id="code" inputmode="numeric" maxlength="3" placeholder="000"></div>
+      </div>
+      <div id="tempBox" hidden>
+        <label for="temp">Temporary ID</label>
+        <input id="temp" placeholder="TEMP-01" autocapitalize="characters">
+      </div>
+      <label for="pin" id="pinLabel">PIN</label>
+      <input type="password" id="pin" inputmode="numeric" maxlength="6" placeholder="5 or 6 digits">
+      <div id="confirmBox" hidden>
+        <label for="pin2">Confirm PIN</label>
+        <input type="password" id="pin2" inputmode="numeric" maxlength="6">
+      </div>
+      <button type="submit" class="btn" id="go">Check me in</button>
+    </form>
+    <div class="msg" id="msg" role="status"></div>
+    <p class="note">To prevent cheating, this portal records the time you check in, whether your location was inside the hall, and a code that identifies your phone’s browser. Your exact location is not stored. Data is kept for this semester only. Keep your PIN private and never share it.</p>
+  </section>
+
+  <section class="card center" id="done" hidden>
+    <div class="tick">✓</div>
+    <h2 id="dTitle"></h2>
+    <p class="muted" id="dText"></p>
+  </section>
+</main>
+<footer>MEE 26 · Takoradi Technical University</footer>
+
+<script>
+  var API_URL = 'https://script.google.com/macros/s/AKfycbypjwlvhi3HKVw62uhCEB6DwYm7EaSc4MDd0Jd533W2teThqRe8NtA7ncFFTckCZgRs/exec';
+  var sessionId = new URLSearchParams(location.search).get('s') || '';
+  var mode = 'INDEX', creating = false, endAt = 0, timerId = null;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function api(payload) {
+    return fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(function (r) { return r.json(); });
+  }
+  function view(name) {
+    ['loading', 'problem', 'formView', 'done'].forEach(function (v) { $(v).hidden = v !== name; });
+  }
+  function problem(title, text) { clearInterval(timerId); $('pTitle').textContent = title; $('pText').textContent = text; view('problem'); }
+  function note(text, isError) { var m = $('msg'); m.textContent = text || ''; m.className = isError ? 'msg error' : 'msg'; }
+  function busy(on, text) { var b = $('go'); b.disabled = on; b.textContent = on ? text : 'Check me in'; }
+  function rand() {
+    var a = new Uint8Array(16);
+    crypto.getRandomValues(a);
+    return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+  }
+  function deviceToken() {
+    try {
+      var t = localStorage.getItem('mee26_device');
+      if (!t) { t = rand(); localStorage.setItem('mee26_device', t); }
+      return t;
+    } catch (e) { return rand(); }
+  }
+  function friendly(msg) { var e = new Error(msg); e.friendly = true; return e; }
+
+  function getLocation() {
+    return new Promise(function (resolve, reject) {
+      if (!navigator.geolocation) { reject(friendly('This browser cannot share its location.')); return; }
+      navigator.geolocation.getCurrentPosition(resolve, function (err) {
+        var m = 'Could not get your location. Try again.';
+        if (err.code === 1) m = 'Location is blocked. Allow location for this page in your browser settings and try again.';
+        else if (err.code === 2) m = 'Your location is not available. Try near a window or outside.';
+        else if (err.code === 3) m = 'Getting your location took too long. Try again.';
+        reject(friendly(m));
+      }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    });
+  }
+
+  function setMode(m) {
+    mode = m;
+    $('modeIndex').className = m === 'INDEX' ? 'on' : '';
+    $('modeTemp').className = m === 'TEMP' ? 'on' : '';
+    $('indexBox').hidden = m !== 'INDEX';
+    $('tempBox').hidden = m !== 'TEMP';
+    note('');
+  }
+  $('modeIndex').onclick = function () { setMode('INDEX'); };
+  $('modeTemp').onclick = function () { setMode('TEMP'); };
+
+  function tick() {
+    var left = Math.max(0, Math.round((endAt - Date.now()) / 1000));
+    if (left === 0) { problem('This session is closed', 'The time for checking in has ended.'); return; }
+    $('timer').textContent = 'Closes in ' + Math.floor(left / 60) + ':' + ('0' + (left % 60)).slice(-2);
+  }
+
+  function showDone(res) {
+    $('dTitle').textContent = res.already ? 'Already checked in' : 'You are checked in';
+    $('dText').textContent = res.studentName + ' · ' + res.courseName + ' · ' + String(res.time).slice(11, 16);
+    clearInterval(timerId);
+    view('done');
+  }
+
+  function handle(res) {
+    if (res.ok) { showDone(res); return; }
+    if (res.code === 'NEEDS_PIN') {
+      creating = true;
+      $('pinLabel').textContent = 'Create a PIN';
+      $('confirmBox').hidden = false;
+      $('pin').value = ''; $('pin2').value = '';
+      note('First time here. Choose a PIN of 5 or 6 digits that you will remember, and enter it twice. You will use it every time.');
+      return;
+    }
+    if (res.code === 'CLOSED') { problem('This session is closed', res.error); return; }
+    note(res.error || 'Something went wrong. Please try again.', true);
+  }
+
+  $('f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var idValue = mode === 'INDEX' ? $('code').value.trim() : $('temp').value.trim();
+    var pin = $('pin').value.trim();
+    if (mode === 'INDEX' && !/^\d{3}$/.test(idValue)) { note('Enter the last 3 digits of your index number.', true); return; }
+    if (mode === 'TEMP' && !idValue) { note('Enter your Temporary ID.', true); return; }
+    if (!/^\d{5,6}$/.test(pin)) { note('Your PIN is 5 or 6 digits.', true); return; }
+    if (creating && pin !== $('pin2').value.trim()) { note('The two PINs do not match.', true); return; }
+    note('');
+    busy(true, 'Getting your location…');
+    getLocation()
+      .then(function (p) {
+        busy(true, 'Checking in…');
+        return api({ action: 'checkin', sessionId: sessionId, idType: mode, idValue: idValue, pin: pin,
+                     setPin: creating, deviceToken: deviceToken(),
+                     lat: p.coords.latitude, lng: p.coords.longitude, accuracy: p.coords.accuracy });
+      })
+      .then(handle)
+      .catch(function (err) {
+        note(err && err.friendly ? err.message : 'Can’t reach the server. Check your internet and try again.', true);
+      })
+      .then(function () { busy(false); });
+  });
+
+  (function start() {
+    if (!sessionId) { problem('Link not valid', 'Please use the check-in link shared on your class group.'); return; }
+    api({ action: 'sessionInfo', sessionId: sessionId })
+      .then(function (res) {
+        if (!res.ok) { problem('Link not valid', res.error || 'Please use the check-in link shared on your class group.'); return; }
+        if (!res.open) { problem('This session is not open', 'Status: ' + res.status + '.'); return; }
+        $('course').textContent = res.courseName + (res.isTest ? ' (test)' : '');
+        endAt = Date.now() + res.secondsLeft * 1000;
+        tick(); timerId = setInterval(tick, 1000);
+        view('formView');
+      })
+      .catch(function () { problem('Can’t reach the server', 'Check your internet and refresh the page.'); });
+  })();
+</script>
+</body>
+</html>
