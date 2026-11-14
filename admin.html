@@ -6,59 +6,54 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Diploma in Mechanical Engineering 2026 | Admin</title>
 <style>
-  :root {
-    --navy: #1F3A5F; --gold: #C9A227; --bg: #F4F6F9;
-    --text: #1B2433; --muted: #5B6677; --line: #D9DEE7; --danger: #B3261E;
-  }
+  :root { --navy: #1F3A5F; --gold: #C9A227; --bg: #F4F6F9; --text: #1B2433; --muted: #5B6677; --line: #D9DEE7; --danger: #B3261E; }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
   button { font: inherit; cursor: pointer; }
-
   header { background: var(--navy); color: #fff; padding: 22px 16px; text-align: center; border-bottom: 4px solid var(--gold); }
   header h1 { margin: 0; font-size: 1.25rem; }
   header p { margin: 6px 0 0; font-size: .9rem; opacity: .85; }
   header .subtitle { margin: 6px 0 0; font-size: 1rem; font-weight: 600; color: #E3C766; }
-
   .narrow { max-width: 420px; margin: 24px auto; padding: 0 16px; }
   .wide { max-width: 960px; margin: 0 auto; padding: 20px 16px 8px; }
   .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
   h2 { margin: 0 0 16px; font-size: 1.1rem; color: var(--navy); }
   label { display: block; margin: 14px 0 6px; font-weight: 600; font-size: .95rem; }
-  input[type=text], input[type=password] { width: 100%; padding: 13px; font-size: 1rem; border: 1px solid var(--line); border-radius: 8px; }
-  input:focus { outline: 3px solid rgba(201,162,39,.45); border-color: var(--gold); }
+  input[type=text], input[type=password], input[type=number], select { width: 100%; padding: 13px; font-size: 1rem; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+  input:focus, select:focus { outline: 3px solid rgba(201,162,39,.45); border-color: var(--gold); }
   .show { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .9rem; color: var(--muted); }
-
   .btn { width: 100%; margin-top: 18px; padding: 14px; font-size: 1rem; font-weight: 600; color: #fff; background: var(--navy); border: 0; border-radius: 8px; }
-  .btn:disabled { opacity: .6; cursor: wait; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
   .btn.small { width: auto; margin: 0; padding: 9px 16px; font-size: .9rem; }
   .btn.secondary { background: #fff; color: var(--navy); border: 1px solid var(--navy); }
-
-  .msg { min-height: 1.2em; margin-top: 14px; font-size: .95rem; color: var(--muted); }
+  a.btn { display: inline-block; text-align: center; text-decoration: none; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .row input { flex: 1; min-width: 0; }
+  .msg { min-height: 1.2em; margin-top: 12px; font-size: .95rem; color: var(--muted); }
   .msg.error { color: var(--danger); }
   .muted { color: var(--muted); }
   .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #EEF2F8; color: var(--navy); font-size: .85rem; font-weight: 600; }
-
   .topbar { background: #fff; border-bottom: 1px solid var(--line); padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
   .topbar .who { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .tabs { background: #fff; border-bottom: 1px solid var(--line); display: flex; gap: 4px; padding: 0 12px; overflow-x: auto; }
   .tab { background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
   .tab.active { color: var(--navy); border-bottom-color: var(--gold); }
-
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 16px; }
   .tile { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
   .tile .num { font-size: 1.8rem; font-weight: 700; color: var(--navy); }
   .tile .lbl { color: var(--muted); font-size: .9rem; }
-
   .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; margin-top: 12px; }
   .course { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
   .course-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
   .chip { background: #EEF2F8; color: var(--navy); border-radius: 6px; padding: 2px 8px; font-size: .8rem; font-weight: 700; }
   .line { color: var(--muted); font-size: .92rem; margin: 4px 0; }
-  .status { display: inline-block; margin-top: 8px; font-size: .8rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+  .status { display: inline-block; font-size: .8rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+  .course > .status { margin-top: 8px; }
   .status.on { background: #E4F4E8; color: #1E6B34; }
   .status.off { background: #F6E5E3; color: var(--danger); }
-
+  .status.closed { background: #EEF2F8; color: var(--muted); }
+  .qr { display: block; margin: 14px 0; }
   footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 18px 16px 30px; }
 </style>
 </head>
@@ -91,6 +86,7 @@
   </div>
   <nav class="tabs">
     <button type="button" class="tab active" data-view="home">Home</button>
+    <button type="button" class="tab" data-view="sessions">Sessions</button>
     <button type="button" class="tab" data-view="courses">Courses</button>
   </nav>
 
@@ -103,6 +99,27 @@
       <div class="tiles">
         <div class="tile"><div class="num" id="courseCount">–</div><div class="lbl">Courses</div></div>
       </div>
+    </section>
+
+    <section id="sessionsView" hidden>
+      <div class="card">
+        <h2>Start a session</h2>
+        <label for="sCourse">Course</label>
+        <select id="sCourse"></select>
+        <label>Hall location</label>
+        <button type="button" class="btn small secondary" id="locBtn">Use my current location as the hall</button>
+        <div class="msg" id="locMsg">Not saved yet. For a real class, do this on your phone, standing inside the hall.</div>
+        <label for="sRadius">Radius (metres)</label>
+        <input type="number" id="sRadius" min="30" max="300">
+        <label for="sMinutes">Session length (minutes)</label>
+        <input type="number" id="sMinutes" min="5" max="60">
+        <div class="show"><input type="checkbox" id="sTest" checked><label for="sTest" style="margin:0;font-weight:400">Test session (delete before launch)</label></div>
+        <button type="button" class="btn" id="startBtn" disabled>Start session</button>
+        <div class="msg" id="startMsg"></div>
+      </div>
+      <div class="card" id="sharePanel" hidden style="margin-top:12px"></div>
+      <h2 style="margin-top:22px">Recent sessions</h2>
+      <div class="course-grid" id="sessionList"></div>
     </section>
 
     <section id="coursesView" hidden>
@@ -120,6 +137,7 @@
   var TOKEN_KEY = 'mee26_admin_token';
   var $ = function (id) { return document.getElementById(id); };
   var tabs = document.querySelectorAll('.tab');
+  var courses = [], hall = null;
 
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -127,52 +145,33 @@
     if (text !== undefined) e.textContent = text;
     return e;
   }
-
   function api(payload) {
-    return fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) })
-      .then(function (r) { return r.json(); });
+    return fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(function (r) { return r.json(); });
   }
   function saveToken(t) { try { sessionStorage.setItem(TOKEN_KEY, t); } catch (e) {} }
   function loadToken() { try { return sessionStorage.getItem(TOKEN_KEY); } catch (e) { return null; } }
   function clearToken() { try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+  function hm(t) { return String(t).slice(11, 16); }
+  function setNote(id, text, isError) { var m = $(id); m.textContent = text || ''; m.className = isError ? 'msg error' : 'msg'; }
 
-  function showScreen(name) {
-    $('loginWrap').hidden = name !== 'login';
-    $('appWrap').hidden = name !== 'app';
-  }
-  function setMsg(text, isError) {
-    var m = $('msg');
-    m.textContent = text || '';
-    m.className = isError ? 'msg error' : 'msg';
-  }
+  function showScreen(name) { $('loginWrap').hidden = name !== 'login'; $('appWrap').hidden = name !== 'app'; }
   function switchTab(name) {
-    $('homeView').hidden = name !== 'home';
-    $('coursesView').hidden = name !== 'courses';
-    Array.prototype.forEach.call(tabs, function (t) {
-      t.classList.toggle('active', t.getAttribute('data-view') === name);
-    });
+    ['home', 'sessions', 'courses'].forEach(function (v) { $(v + 'View').hidden = v !== name; });
+    Array.prototype.forEach.call(tabs, function (t) { t.classList.toggle('active', t.getAttribute('data-view') === name); });
   }
   Array.prototype.forEach.call(tabs, function (t) {
     t.addEventListener('click', function () { switchTab(t.getAttribute('data-view')); });
   });
+  function endSession(message) { clearToken(); showScreen('login'); setNote('msg', message, !!message); }
 
-  function endSession(message) {
-    clearToken();
-    showScreen('login');
-    setMsg(message || '', !!message);
-  }
-
+  // ---- Courses ----
   function renderCourses(list) {
     var box = $('courseList');
     box.innerHTML = '';
     $('courseCount').textContent = list.length;
-    if (!list.length) {
-      box.appendChild(el('p', 'muted', 'No courses yet. Add them in the Courses tab of your Google Sheet.'));
-      return;
-    }
+    if (!list.length) { box.appendChild(el('p', 'muted', 'No courses yet. Add them in the Courses tab of your Google Sheet.')); return; }
     list.forEach(function (c) {
-      var card = el('div', 'course');
-      var top = el('div', 'course-top');
+      var card = el('div', 'course'), top = el('div', 'course-top');
       top.appendChild(el('strong', '', c.courseName));
       top.appendChild(el('span', 'chip', c.courseId));
       card.appendChild(top);
@@ -183,20 +182,150 @@
       box.appendChild(card);
     });
   }
+  function fillCourseSelect() {
+    var s = $('sCourse');
+    s.innerHTML = '';
+    courses.filter(function (c) { return c.active; }).forEach(function (c) {
+      var o = el('option', '', c.courseName);
+      o.value = c.courseId;
+      s.appendChild(o);
+    });
+    applyDefaults();
+  }
+  function applyDefaults() {
+    var c = courses.filter(function (x) { return x.courseId === $('sCourse').value; })[0];
+    if (c) { $('sRadius').value = c.radiusM; $('sMinutes').value = c.durationMin; }
+  }
+  $('sCourse').addEventListener('change', applyDefaults);
 
   function loadCourses() {
     $('courseList').textContent = 'Loading courses…';
     api({ action: 'listCourses', token: loadToken() })
       .then(function (res) {
-        if (res.ok) { renderCourses(res.courses); }
+        if (res.ok) { courses = res.courses; renderCourses(courses); fillCourseSelect(); }
         else if (res.expired) { endSession(res.error); }
         else { $('courseList').textContent = res.error || 'Could not load courses.'; }
       })
-      .catch(function () {
-        $('courseList').textContent = 'Can’t reach the server. Check your internet and try again.';
-      });
+      .catch(function () { $('courseList').textContent = 'Can’t reach the server. Check your internet and try again.'; });
   }
 
+  // ---- Sessions ----
+  function getLocation() {
+    return new Promise(function (resolve, reject) {
+      if (!navigator.geolocation) { reject(new Error('This browser cannot share its location.')); return; }
+      navigator.geolocation.getCurrentPosition(resolve, function (err) {
+        var m = 'Could not get the location.';
+        if (err.code === 1) m = 'Location permission was refused. Allow location for this site and try again.';
+        else if (err.code === 2) m = 'Location is not available right now. Try near a window or outside.';
+        else if (err.code === 3) m = 'Getting the location took too long. Try again.';
+        reject(new Error(m));
+      }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    });
+  }
+
+  $('locBtn').addEventListener('click', function () {
+    setNote('locMsg', 'Getting your location… allow it if asked.');
+    getLocation().then(function (p) {
+      hall = { lat: p.coords.latitude, lng: p.coords.longitude, acc: Math.round(p.coords.accuracy) };
+      var warn = hall.acc > 60 ? ' Accuracy is low. For a real class, try again on your phone near the middle of the hall.' : '';
+      setNote('locMsg', 'Saved: ' + hall.lat.toFixed(5) + ', ' + hall.lng.toFixed(5) + ' (accuracy about ' + hall.acc + ' m).' + warn);
+      $('startBtn').disabled = false;
+    }).catch(function (e) { setNote('locMsg', e.message, true); });
+  });
+
+  $('startBtn').addEventListener('click', function () {
+    var btn = this;
+    btn.disabled = true;
+    setNote('startMsg', 'Starting…');
+    api({ action: 'startSession', token: loadToken(), courseId: $('sCourse').value,
+          hallLat: hall.lat, hallLng: hall.lng, radiusM: Number($('sRadius').value),
+          durationMin: Number($('sMinutes').value), isTest: $('sTest').checked })
+      .then(function (res) {
+        if (res.ok) { setNote('startMsg', 'Session started.'); showShare(res.session); loadSessions(); }
+        else if (res.expired) { endSession(res.error); }
+        else { setNote('startMsg', res.error, true); }
+      })
+      .catch(function () { setNote('startMsg', 'Can’t reach the server. Try again.', true); })
+      .then(function () { btn.disabled = !hall; });
+  });
+
+  function checkinLink(id) {
+    return location.origin + location.pathname.replace(/admin\.html$/, '') + 'checkin.html?s=' + encodeURIComponent(id);
+  }
+
+  function showShare(s) {
+    var link = checkinLink(s.sessionId), p = $('sharePanel');
+    p.hidden = false;
+    p.innerHTML = '';
+    p.appendChild(el('h2', '', 'Share: ' + s.courseName + (s.isTest ? ' (test)' : '')));
+    var row = el('div', 'row'), inp = el('input'), cp = el('button', 'btn small', 'Copy');
+    inp.type = 'text'; inp.readOnly = true; inp.value = link;
+    cp.type = 'button';
+    cp.onclick = function () {
+      inp.select();
+      var done = function () { cp.textContent = 'Copied'; };
+      if (navigator.clipboard) { navigator.clipboard.writeText(link).then(done, function () { document.execCommand('copy'); done(); }); }
+      else { document.execCommand('copy'); done(); }
+    };
+    row.appendChild(inp); row.appendChild(cp);
+    p.appendChild(row);
+    var wa = el('a', 'btn small secondary', 'Share on WhatsApp');
+    wa.href = 'https://wa.me/?text=' + encodeURIComponent(s.courseName + ' attendance. Check in before ' + hm(s.closesAt) + ': ' + link);
+    wa.target = '_blank'; wa.rel = 'noopener'; wa.style.marginTop = '12px';
+    p.appendChild(wa);
+    var img = el('img', 'qr');
+    img.alt = 'QR code for the check-in link'; img.width = 200; img.height = 200;
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(link);
+    p.appendChild(img);
+    p.appendChild(el('p', 'muted', 'Students check in on a page we build in the next stage, so this link shows “page not found” until then.'));
+    p.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function renderSessions(list) {
+    var box = $('sessionList');
+    box.innerHTML = '';
+    if (!list.length) { box.appendChild(el('p', 'muted', 'No sessions yet.')); return; }
+    list.forEach(function (s) {
+      var card = el('div', 'course'), top = el('div', 'course-top');
+      top.appendChild(el('strong', '', s.courseName + (s.isTest ? ' (test)' : '')));
+      top.appendChild(el('span', s.status === 'Open' ? 'status on' : 'status closed', s.status));
+      card.appendChild(top);
+      card.appendChild(el('div', 'line', s.date + (s.weekNo ? ' · Week ' + s.weekNo : '') + ' · ' + hm(s.openedAt) + ' to ' + hm(s.closesAt)));
+      card.appendChild(el('div', 'line', 'Opened by ' + s.openedBy + ' · radius ' + s.radiusM + ' m'));
+      if (s.status === 'Open') {
+        var row = el('div', 'row'), share = el('button', 'btn small secondary', 'Share'), close = el('button', 'btn small', 'Close now');
+        row.style.marginTop = '10px';
+        share.type = 'button'; close.type = 'button';
+        share.onclick = function () { showShare(s); };
+        close.onclick = function () { closeSession(s); };
+        row.appendChild(share); row.appendChild(close);
+        card.appendChild(row);
+      }
+      box.appendChild(card);
+    });
+  }
+
+  function closeSession(s) {
+    if (!confirm('Close ' + s.courseName + ' now? Students will no longer be able to check in.')) return;
+    api({ action: 'closeSession', token: loadToken(), sessionId: s.sessionId })
+      .then(function (res) {
+        if (res.expired) { endSession(res.error); return; }
+        if (!res.ok) { alert(res.error); }
+        loadSessions();
+      })
+      .catch(function () { alert('Can’t reach the server. Try again.'); });
+  }
+
+  function loadSessions() {
+    api({ action: 'listSessions', token: loadToken() })
+      .then(function (res) {
+        if (res.ok) { renderSessions(res.sessions); }
+        else if (res.expired) { endSession(res.error); }
+      })
+      .catch(function () {});
+  }
+
+  // ---- Login ----
   function enterApp(info) {
     $('who').textContent = info.name;
     $('welcomeName').textContent = info.name;
@@ -204,22 +333,21 @@
     showScreen('app');
     switchTab('home');
     loadCourses();
+    loadSessions();
   }
 
-  $('showPw').addEventListener('change', function () {
-    $('password').type = this.checked ? 'text' : 'password';
-  });
+  $('showPw').addEventListener('change', function () { $('password').type = this.checked ? 'text' : 'password'; });
 
   $('loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
     var btn = $('loginBtn');
-    btn.disabled = true; btn.textContent = 'Checking…'; setMsg('');
+    btn.disabled = true; btn.textContent = 'Checking…'; setNote('msg', '');
     api({ action: 'login', adminId: $('adminId').value, password: $('password').value })
       .then(function (res) {
         if (res.ok) { saveToken(res.token); $('password').value = ''; enterApp(res); }
-        else { setMsg(res.error || 'Could not log in.', true); }
+        else { setNote('msg', res.error || 'Could not log in.', true); }
       })
-      .catch(function () { setMsg('Can’t reach the server. Check your internet and try again.', true); })
+      .catch(function () { setNote('msg', 'Can’t reach the server. Check your internet and try again.', true); })
       .then(function () { btn.disabled = false; btn.textContent = 'Log in'; });
   });
 
@@ -227,7 +355,7 @@
     var token = loadToken();
     clearToken();
     showScreen('login');
-    setMsg('You have been logged out.');
+    setNote('msg', 'You have been logged out.');
     if (token) api({ action: 'logout', token: token }).catch(function () {});
   });
 
@@ -235,10 +363,7 @@
     var token = loadToken();
     if (!token) { showScreen('login'); return; }
     api({ action: 'whoami', token: token })
-      .then(function (res) {
-        if (res.ok) { enterApp(res); }
-        else { endSession(res.error); }
-      })
+      .then(function (res) { if (res.ok) { enterApp(res); } else { endSession(res.error); } })
       .catch(function () { showScreen('login'); });
   })();
 </script>
