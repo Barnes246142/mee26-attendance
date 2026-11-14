@@ -298,8 +298,9 @@
         share.type = 'button'; close.type = 'button';
         share.onclick = function () { showShare(s); };
         close.onclick = function () { closeSession(s); };
-        row.appendChild(share); row.appendChild(close);
-        card.appendChild(row);
+               var live = el('a', 'btn small secondary', 'View live');
+        live.href = 'live.html?s=' + encodeURIComponent(s.sessionId);
+        row.appendChild(share); row.appendChild(live); row.appendChild(close);
       }
       box.appendChild(card);
     });
