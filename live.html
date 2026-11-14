@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Live session | Admin</title>
+<style>
+  :root { --navy: #1F3A5F; --gold: #C9A227; --bg: #F4F6F9; --text: #1B2433; --muted: #5B6677; --line: #D9DEE7; --danger: #B3261E; --ok: #1E6B34; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+  header { background: var(--navy); color: #fff; padding: 16px; text-align: center; border-bottom: 4px solid var(--gold); }
+  header h1 { margin: 0; font-size: 1.1rem; }
+  header p { margin: 4px 0 0; font-size: .9rem; color: #E3C766; font-weight: 600; }
+  .topbar { background: #fff; border-bottom: 1px solid var(--line); padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .wide { max-width: 760px; margin: 0 auto; padding: 16px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+  h2 { margin: 0 0 6px; font-size: 1.1rem; color: var(--navy); }
+  h3 { margin: 22px 0 8px; font-size: 1rem; color: var(--navy); }
+  .muted { color: var(--muted); font-size: .92rem; }
+  .btn { display: inline-block; padding: 9px 16px; font: inherit; font-size: .9rem; font-weight: 600; color: var(--navy); background: #fff; border: 1px solid var(--navy); border-radius: 8px; cursor: pointer; text-decoration: none; }
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+  .tile { background: var(--bg); border-radius: 10px; padding: 12px; text-align: center; }
+  .tile .num { font-size: 1.7rem; font-weight: 700; color: var(--navy); }
+  .tile .lbl { font-size: .8rem; color: var(--muted); }
+  .bar { height: 10px; background: #E5E9F0; border-radius: 999px; margin-top: 14px; overflow: hidden; }
+  .bar div { height: 100%; width: 0; background: var(--ok); transition: width .4s; }
+  .item { display: flex; justify-content: space-between; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; font-size: .95rem; }
+  .item.col { flex-direction: column; gap: 2px; }
+  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 10px 16px 30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Diploma in Mechanical Engineering 2026</h1>
+  <p>Live attendance</p>
+</header>
+<div class="topbar">
+  <a class="btn" href="admin.html">← Back to admin</a>
+  <span><span class="muted" id="upd"></span> <button class="btn" id="refresh" type="button">Refresh now</button></span>
+</div>
+
+<main class="wide">
+  <section class="card" id="problem" hidden>
+    <h2 id="pTitle"></h2>
+    <p class="muted" id="pText"></p>
+  </section>
+
+  <section id="dash" hidden>
+    <div class="card">
+      <h2 id="title"></h2>
+      <div class="muted" id="sub"></div>
+      <div class="tiles">
+        <div class="tile"><div class="num" id="nPresent">0</div><div class="lbl">Present</div></div>
+        <div class="tile"><div class="num" id="nMissing">0</div><div class="lbl">Missing</div></div>
+        <div class="tile"><div class="num" id="nFlags">0</div><div class="lbl">Flags</div></div>
+      </div>
+      <div class="bar"><div id="fill"></div></div>
+      <div class="muted" style="margin-top:6px">Out of <span id="nTotal">0</span> students in the class list</div>
+    </div>
+    <h3>Flags</h3>
+    <div id="flagList"></div>
+    <h3>Present (latest first)</h3>
+    <div id="presentList"></div>
+    <h3>Missing</h3>
+    <div id="missingList"></div>
+  </section>
+</main>
+<footer>MEE 26 · Takoradi Technical University</footer>
+
+<script>
+  var API_URL = 'https://script.google.com/macros/s/AKfycbypjwlvhi3HKVw62uhCEB6DwYm7EaSc4MDd0Jd533W2teThqRe8NtA7ncFFTckCZgRs/exec';
+  var TOKEN_KEY = 'mee26_admin_token';
+  var sessionId = new URLSearchParams(location.search).get('s') || '';
+  var $ = function (id) { return document.getElementById(id); };
+  var timer = null;
+  var TYPES = { OUTSIDE_RANGE: 'Outside range', NEW_DEVICE: 'New phone', SHARED_DEVICE: 'Shared phone', PIN_LOCKED: 'PIN locked' };
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function api(payload) {
+    return fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(function (r) { return r.json(); });
+  }
+  function problem(title, text) {
+    $('pTitle').textContent = title; $('pText').textContent = text;
+    $('problem').hidden = false; $('dash').hidden = true;
+  }
+  function fill(boxId, items, build, emptyText) {
+    var box = $(boxId);
+    box.innerHTML = '';
+    if (!items.length) { box.appendChild(el('p', 'muted', emptyText)); return; }
+    items.forEach(function (x) { box.appendChild(build(x)); });
+  }
+
+  function render(d) {
+    $('title').textContent = d.session.courseName + (d.session.isTest ? ' (test)' : '');
+    $('sub').textContent = d.session.status === 'Open' ? 'Open · closes at ' + d.session.closesAt.slice(11, 16) : d.session.status;
+    $('nPresent').textContent = d.presentCount;
+    $('nMissing').textContent = d.total - d.presentCount;
+    $('nFlags').textContent = d.flags.length;
+    $('nTotal').textContent = d.total;
+    $('fill').style.width = (d.total ? Math.round(100 * d.presentCount / d.total) : 0) + '%';
+
+    fill('flagList', d.flags, function (f) {
+      var row = el('div', 'item col');
+      row.appendChild(el('strong', '', f.who + ' · ' + (TYPES[f.type] || f.type)));
+      row.appendChild(el('span', 'muted', f.time + ' · ' + f.details));
+      return row;
+    }, 'No flags in this session.');
+
+    fill('presentList', d.present, function (p) {
+      var row = el('div', 'item');
+      row.appendChild(el('span', '', p.code + ' · ' + p.name));
+      row.appendChild(el('span', 'muted', p.time.slice(11, 16) + (p.method === 'SELF' ? '' : ' · ' + p.method)));
+      return row;
+    }, 'No one has checked in yet.');
+
+    fill('missingList', d.missing, function (m) {
+      return el('div', 'item', m.code + ' · ' + m.name);
+    }, 'Everyone has checked in.');
+  }
+
+  function load() {
+    clearTimeout(timer);
+    var token = null;
+    try { token = sessionStorage.getItem(TOKEN_KEY); } catch (e) {}
+    if (!sessionId || !token) {
+      problem('Please log in first', 'Open the admin page, log in, and choose “View live” on an open session.');
+      return;
+    }
+    api({ action: 'liveSession', token: token, sessionId: sessionId })
+      .then(function (res) {
+        if (res.expired) { problem('Please log in again', 'Your admin session has ended. Go back to the admin page and log in.'); return; }
+        if (!res.ok) { problem('Session not found', res.error || ''); return; }
+        $('problem').hidden = true; $('dash').hidden = false;
+        render(res);
+        $('upd').textContent = 'Updated ' + new Date().toLocaleTimeString();
+        if (res.session.status === 'Open') timer = setTimeout(load, 10000);
+      })
+      .catch(function () {
+        $('upd').textContent = 'Server busy. Retrying…';
+        timer = setTimeout(load, 10000);
+      });
+  }
+
+  $('refresh').addEventListener('click', load);
+  load();
+</script>
+</body>
+</html>
